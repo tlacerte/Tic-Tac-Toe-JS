@@ -1,74 +1,95 @@
 /*----- constants -----*/ 
-const PLAYERS = {
-    'null': null,
-    '1': 'X',
-    '-1': 'O',
-};
-
-const winningCombos = {
-    [1, 2, 3],
-    [1, 4, 7],
-    [1, 5, 9],
-    [2, 5, 8],
-    [3, 6, 9],
-    [3, 5, 7],
-    [4, 5, 6],
-    [7, 8, 9]
-}
+const winningCombos = [[0,1,2],[3,4,5],[6,7,8],
+[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 
 /*----- app's state (variables) -----*/ 
-let board, turn, winner;
+var counter = 1;
+var winCounter = 0;
+var OMoves = [];
+var XMoves = [];
 
 /*----- cached element references -----*/ 
-var msg = document.querySelector('h2');
-var boxes = document.querySelector('section div');
+var boxes = document.getElementsByTagName("td");
+var turnText = document.querySelector(".playerTurn");
+
 
 /*----- event listeners -----*/ 
-document.querySelector('section').addEventListener('click', handleTurn)
-document.querySelector('button').addEventListener('click', init);
 
 /*----- functions -----*/
-init();
-
-function init() {
-    board = [null, null, null, null, null, null ,null, null, null];
-    turn = 1;
-    winner = null;   //1, -1, null (no winner), 'C' (cats game)
-}
-
-function handleTurn(event) {
-    let idx = parseInt(event.target.id.replace('box', ''));
-    if (board[idx] || winner) return;
-    board[idx] = turn;
-    turn *= -1;
-    winner = getWinner();
-    render();
-}
-
-function getWinner() {
-    for (var i = 0; i < winningCombos.length; i++) {
-    if (Math.abs(board[0] + board[1] + board[2]) === 3) return board[0];
-    if (Math.abs(board[3] + board[4] + board[5]) === 3) return board[3];
-    if (Math.abs(board[6] + board[7] + board[8]) === 3) return board[6];
-    if (Math.abs(board[0] + board[3] + board[6]) === 3) return board[0];
-    if (Math.abs(board[1] + board[4] + board[7]) === 3) return board[1];
-    if (Math.abs(board[2] + board[5] + board[8]) === 3) return board[2];
-    if (Math.abs(board[0] + board[4] + board[8]) === 3) return board[0];
-    if (Math.abs(board[2] + board[4] + board[6]) === 3) return board[2];
-    }
-    if (board.includes(null)) return null;
-    return 'C';
-}
-
-function render() {
-  board.forEach(function(box, idx) {
-    boxes[idx].createTextNode = lookup[PLAYERS];
-  });
-  if (winner === 'C') {
-    msg.innerHTML = 'CAT's Game!';
-  } else if (winner) {
-    msg.innerHTML = `${lookup[winner].toUpperCase()} WIN!`;
-  } else {
-    msg.innerHTML = `${lookup[turn].toUpperCase()}'s Turn`;
+window.onload = init;
+function init(){
+    addXandOListener();
+    addResetListener();
   }
-}
+  
+  function addXandOListener(){
+    for (var i = boxes.length - 1; i >= 0; i--) {
+      boxes[i].addEventListener("click", addXorO);
+    }
+  }
+  
+  function addXorO(event){
+    if (event.target.innerHTML.length === 0){
+      if (counter % 2 === 0) {
+        OMoves.push(parseInt(event.target.getAttribute("data-num")));
+        event.target.innerHTML = "O";
+        event.target.setAttribute("class","O");
+        turnText.innerHTML = "X's turn";
+        counter++;
+        checkForWin(OMoves, "O");
+      }
+      else {
+        XMoves.push(parseInt(event.target.getAttribute("data-num")));
+        event.target.innerHTML = "X";
+        event.target.setAttribute("class","X");
+        turnText.innerHTML = "O's turn";
+        counter++;
+        checkForWin(XMoves, "X");
+      }
+    // if the counter is greater than or equal to 10, the game is a draw
+    if (counter >= 10){
+      turnText.innerHTML = "Game Over!";
+      var conf = confirm("CAT's Game! Do you want to play again?");
+      if(conf){
+        resetBoard();
+      }
+    }
+   }
+  }
+  
+  function addResetListener(){
+    var resetButton = document.getElementById("reset");
+    resetButton.addEventListener("click", resetBoard);
+  }
+  
+  function checkForWin(movesArray, name){
+    // loop over the first array of winning combinations
+    for (i = 0; i < winningCombos.length; i++) {
+      // reset the winCounter each time
+      winCounter = 0;
+      // loop over each individual array
+      for (var j = 0; j < winningCombos[i].length; j++) {
+        // if the number in winning combo array is === a number in moves array, add to winCounter
+        if(movesArray.indexOf(winningCombos[i][j]) !== -1){
+          winCounter++;
+        }
+        // if winCounter === 3 that means all 3 moves are winning combos and game over
+        if(winCounter === 3){
+          alert("Game over, " + name + " wins!");
+          resetBoard();
+        }
+      }
+    }
+  }
+  
+  function resetBoard(){
+    for (var i = boxes.length - 1; i >= 0; i--) {
+      boxes[i].innerHTML="";
+      boxes[i].setAttribute("class","clear");
+    }
+    OMoves = [];
+    XMoves = [];
+    winCounter=0;
+    counter = 1;
+    turnText.innerHTML = "It is X's turn";
+  }

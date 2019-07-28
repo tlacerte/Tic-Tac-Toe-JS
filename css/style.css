@@ -40,3 +40,32 @@ tfoot tr td{
   border-top:none;
   border-bottom: none;
 }
+
+.button, .playerTurn {
+   text-align: center;
+}
+  
+#reset {
+    padding: 1vmin;
+    width: 20vmin;
+    font-size: 0.5em;
+    border-radius: 10px;
+    cursor: pointer;
+}
+  
+#reset:hover{
+    background:black;
+    border-color: white;
+    color: white;
+}
+
+body {
+    font-family:'Trebuchet MS';
+    height: 100vh;
+    margin: 0;
+    justify-content: center;
+}
+  
+h1, h2 {
+    text-align: center;
+}
