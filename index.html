@@ -9,21 +9,33 @@
     <script defer src="js/main.js"></script>
 </head>
 <body>
-    <h1>Tic-Tac-Toe</h1>
-    <h2 id="msg"></h2>
-    <section id="board">
-        <div id="box1"></div>
-        <div id="box2"></div>
-        <div id="box3"></div>
-
-        <div id="box4"></div>
-        <div id="box5"></div>
-        <div id="box6"></div>
-
-        <div id="box7"></div>
-        <div id="box8"></div>
-        <div id="box9"></div>
-    </section>
-  <br><button>Reset Game</button>
-</body>
-</html>
+    <h1>Tic Tac Toe</h1>
+    <h2 class = "playerTurn">It is X's turn</h2>
+    <table>
+      <thead>
+        <tr>
+          <td data-num="0"></td>
+          <td data-num="1"></td>
+          <td data-num="2"></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-num="3"></td>
+          <td data-num="4"></td>
+          <td data-num="5"></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td data-num="6"></td>
+          <td data-num="7"></td>
+          <td data-num="8"></td>
+        </tr>
+      </tfoot>
+    </table>
+    <div class = "button">
+      <button id="reset">Reset Game</button>
+    </div>
+  </body>
+  </html>
