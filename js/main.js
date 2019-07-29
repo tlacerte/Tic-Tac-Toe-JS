@@ -14,18 +14,21 @@ var turnText = document.querySelector(".playerTurn");
 
 
 /*----- event listeners -----*/ 
+function addXandOListener(){
+    for (var i = boxes.length - 1; i >= 0; i--) {
+      boxes[i].addEventListener("click", addXorO);
+    }
+  }
 
+function addResetListener(){
+    var resetButton = document.getElementById("reset");
+    resetButton.addEventListener("click", resetBoard);
+  }
 /*----- functions -----*/
 window.onload = init;
 function init(){
     addXandOListener();
     addResetListener();
-  }
-  
-  function addXandOListener(){
-    for (var i = boxes.length - 1; i >= 0; i--) {
-      boxes[i].addEventListener("click", addXorO);
-    }
   }
   
   function addXorO(event){
@@ -57,10 +60,6 @@ function init(){
    }
   }
   
-  function addResetListener(){
-    var resetButton = document.getElementById("reset");
-    resetButton.addEventListener("click", resetBoard);
-  }
   
   function checkForWin(movesArray, name){
     // loop over the first array of winning combinations
@@ -91,5 +90,5 @@ function init(){
     XMoves = [];
     winCounter=0;
     counter = 1;
-    turnText.innerHTML = "It is X's turn";
+    turnText.innerHTML = "X's turn";
   }
